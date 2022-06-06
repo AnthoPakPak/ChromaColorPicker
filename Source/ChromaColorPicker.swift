@@ -121,8 +121,13 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
                 return true
             } else { // handle tap to select color (not that it only works when using one handle only)
                 if colorWheelView.pointIsInColorWheel(location) { //only if tap is in wheel
-                    positionHandle(handle, forColorLocation: location)
-                    informDelegateOfColorChange(on: handle)
+                    if let pixelColor = colorWheelView.pixelColor(at: location) {
+                        let previousBrightness = handle.color.brightness
+                        handle.color = pixelColor.withBrightness(previousBrightness)
+
+                        positionHandle(handle, forColorLocation: location)
+                        informDelegateOfColorChange(on: handle)
+                    }
                     return self.beginTracking(touch, with: event)
                 }
             }
