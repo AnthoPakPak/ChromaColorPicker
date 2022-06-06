@@ -272,9 +272,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3503B83A1F2689BC00750356 /* Build configuration list for PBXNativeTarget "ChromaColorPicker" */;
 			buildPhases = (
+				3503B82C1F2689BC00750356 /* Headers */,
 				3503B82A1F2689BC00750356 /* Sources */,
 				3503B82B1F2689BC00750356 /* Frameworks */,
-				3503B82C1F2689BC00750356 /* Headers */,
 				3503B82D1F2689BC00750356 /* Resources */,
 			);
 			buildRules = (
