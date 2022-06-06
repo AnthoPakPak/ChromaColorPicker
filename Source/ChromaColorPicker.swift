@@ -107,6 +107,15 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
     public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let location = touch.location(in: colorWheelView)
         
+        //Create handle at tapped location if there's none
+        if currentHandle == nil {
+            if let pixelColor = colorWheelView.pixelColor(at: location) {
+                let newHandle = addHandle(at: pixelColor)
+                layoutSubviews()
+                informDelegateOfColorChange(on: newHandle)
+            }
+        }
+        
         for handle in handles {
             if extendedHitFrame(for: handle).contains(location) {
                 colorWheelView.bringSubviewToFront(handle)
