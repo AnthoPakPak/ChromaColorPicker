@@ -119,6 +119,11 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
                 
                 currentHandle = handle
                 return true
+            } else { // handle tap to select color (not that it only works when using one handle only)
+                if colorWheelView.pointIsInColorWheel(location) { //only if tap is in wheel
+                    positionHandle(handle, forColorLocation: location)
+                    return self.beginTracking(touch, with: event)
+                }
             }
         }
         return false
