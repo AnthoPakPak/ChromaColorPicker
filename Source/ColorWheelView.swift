@@ -143,6 +143,14 @@ public class ColorWheelView: UIView {
         return pointExistsInRadius
     }
     
+    public func pointIsInColorCircle(_ point: CGPoint) -> Bool {
+        guard bounds.insetBy(dx: -1, dy: -1).contains(point) else { return false }
+        
+        let distanceFromCenter: CGFloat = hypot(middlePoint.x - point.x, middlePoint.y - point.y)
+        let pointExistsInCircle: Bool = distanceFromCenter <= (radius - layer.borderWidth) && distanceFromCenter >= (radius - defaultTemperatureWheelSize)
+        return pointExistsInCircle
+    }
+    
     public func pointIsOnColorWheelEdge(_ point: CGPoint) -> Bool {
         let distanceToCenter = hypot(middlePoint.x - point.x, middlePoint.y - point.y)
         let isPointOnEdge = distanceToCenter >= radius - 1.0
@@ -193,7 +201,7 @@ public class ColorWheelView: UIView {
     //inspired by https://stackoverflow.com/a/21121954/4894980
     internal func makeTemperatureWheelLayer() -> CAGradientLayer {
         let faucetShape = CAShapeLayer()
-        faucetShape.lineWidth = 50
+        faucetShape.lineWidth = defaultTemperatureWheelSize
         faucetShape.frame = CGRect(x: faucetShape.lineWidth/4, y: faucetShape.lineWidth/4, width: imageView.frame.width - faucetShape.lineWidth, height: imageView.frame.height - faucetShape.lineWidth)
         faucetShape.strokeColor = UIColor.black.cgColor
         faucetShape.fillColor = nil
@@ -204,8 +212,9 @@ public class ColorWheelView: UIView {
         let faucet = CAGradientLayer()
         faucet.frame = imageView.frame
         faucet.mask = faucetShape
-        faucet.colors = [UIColor.hexStringToUIColor(hex: "FE9C3E").cgColor, UIColor.hexStringToUIColor(hex: "FFFFFF").cgColor, UIColor.hexStringToUIColor(hex: "CADBFE").cgColor].compactMap { $0 }
-        
+//        faucet.colors = [UIColor.hexStringToUIColor(hex: "FE9C3E").cgColor, UIColor.hexStringToUIColor(hex: "FFFFFF").cgColor, UIColor.hexStringToUIColor(hex: "CADBFE").cgColor]
+        faucet.colors = [UIColor(temperature: 2001).cgColor, UIColor(temperature: 5500).cgColor, UIColor(temperature: 9000).cgColor]
+
         return faucet
     }
     
@@ -222,3 +231,5 @@ public class ColorWheelView: UIView {
         return UIColor(hue: hue, saturation: 1, brightness: 1.0, alpha: 1.0)
     }
 }
+
+internal let defaultTemperatureWheelSize: CGFloat = 50

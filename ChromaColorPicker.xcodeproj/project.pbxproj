@@ -15,6 +15,7 @@
 		35C376D61D5CF5300069D7A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35C376D41D5CF5300069D7A1 /* Main.storyboard */; };
 		35C376D81D5CF5300069D7A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35C376D71D5CF5300069D7A1 /* Assets.xcassets */; };
 		35C376DB1D5CF5300069D7A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35C376D91D5CF5300069D7A1 /* LaunchScreen.storyboard */; };
+		8EBEBC73284F68BB000E2C83 /* UIColor+Kelvin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EBEBC72284F68BB000E2C83 /* UIColor+Kelvin.swift */; };
 		C83A935D23760C1600564E01 /* UIColor+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83A935C23760C1600564E01 /* UIColor+Utils.swift */; };
 		C83A936023760C5900564E01 /* UIColor+UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83A935E23760C3800564E01 /* UIColor+UtilsTests.swift */; };
 		FC1BD8C02207D7B700817AF3 /* ChromaColorPickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1BD8BF2207D7B700817AF3 /* ChromaColorPickerTests.swift */; };
@@ -89,6 +90,7 @@
 		35C376D71D5CF5300069D7A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35C376DA1D5CF5300069D7A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		35C376DC1D5CF5300069D7A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8EBEBC72284F68BB000E2C83 /* UIColor+Kelvin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Kelvin.swift"; sourceTree = "<group>"; };
 		C83A935C23760C1600564E01 /* UIColor+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Utils.swift"; sourceTree = "<group>"; };
 		C83A935E23760C3800564E01 /* UIColor+UtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+UtilsTests.swift"; sourceTree = "<group>"; };
 		FC1BD8BD2207D7B700817AF3 /* ChromaColorPickerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChromaColorPickerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -222,6 +224,7 @@
 				C83A935C23760C1600564E01 /* UIColor+Utils.swift */,
 				FCCA42A92260329900BE2FF9 /* UIView+DropShadow.swift */,
 				FC89B7E32325C24F00D007AB /* UIView+Utils.swift */,
+				8EBEBC72284F68BB000E2C83 /* UIColor+Kelvin.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EBEBC73284F68BB000E2C83 /* UIColor+Kelvin.swift in Sources */,
 				FCEA4E272235AAA200C0A1B6 /* ChromaColorPicker.swift in Sources */,
 				FC4387CD2262B82600F739F1 /* ChromaControlStylable.swift in Sources */,
 				FC89B7E42325C24F00D007AB /* UIView+Utils.swift in Sources */,

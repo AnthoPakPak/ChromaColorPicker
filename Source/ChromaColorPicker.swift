@@ -129,10 +129,13 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
         
         //Create handle at tapped location if there's none
         if currentHandle == nil {
-            if let pixelColor = colorWheelView.pixelColor(at: location) {
-                let newHandle = addHandle(at: pixelColor)
-                layoutSubviews()
-                informDelegateOfColorChange(on: newHandle)
+            if (mode == .RGB && colorWheelView.pointIsInColorWheel(location))
+                || (mode == .Temperature && colorWheelView.pointIsInColorCircle(location)){ //only if tap is in wheel
+                if let pixelColor = colorWheelView.pixelColor(at: location) {
+                    let newHandle = addHandle(at: pixelColor)
+                    layoutSubviews()
+                    informDelegateOfColorChange(on: newHandle)
+                }
             }
         }
         
@@ -149,7 +152,8 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
                 currentHandle = handle
                 return true
             } else { // handle tap to select color (not that it only works when using one handle only)
-                if colorWheelView.pointIsInColorWheel(location) { //only if tap is in wheel
+                if (mode == .RGB && colorWheelView.pointIsInColorWheel(location))
+                    || (mode == .Temperature && colorWheelView.pointIsInColorCircle(location)){ //only if tap is in wheel
                     if let pixelColor = colorWheelView.pixelColor(at: location) {
                         let previousBrightness = handle.color.brightness
                         handle.color = pixelColor.withBrightness(previousBrightness)
@@ -171,11 +175,24 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
         if !colorWheelView.pointIsInColorWheel(location) {
             // Touch is outside color wheel and should map to outermost edge.
             let center = colorWheelView.middlePoint
-            let radius = colorWheelView.radius
+            let radius = colorWheelView.radius - 2 //substract small value to handle edges (since edgeColor:forAngle: isn't supported on Temperature mode)
             let angleToCenter = atan2(location.x - center.x, location.y - center.y)
             let positionOnColorWheelEdge = CGPoint(x: center.x + radius * sin(angleToCenter),
                                                    y: center.y + radius * cos(angleToCenter))
             location = positionOnColorWheelEdge
+        } else {
+            //Point is in color wheel. If mode is Temperature, also check point is in circle
+            if mode == .Temperature {
+                if !colorWheelView.pointIsInColorCircle(location) {
+                    // Touch is outside color circle and should map to innermost edge.
+                    let center = colorWheelView.middlePoint
+                    let radius = colorWheelView.radius - (defaultTemperatureWheelSize - 2) //substract small value to handle edges
+                    let angleToCenter = atan2(location.x - center.x, location.y - center.y)
+                    let positionOnColorWheelEdge = CGPoint(x: center.x + radius * sin(angleToCenter),
+                                                           y: center.y + radius * cos(angleToCenter))
+                    location = positionOnColorWheelEdge
+                }
+            }
         }
         
         if let pixelColor = colorWheelView.pixelColor(at: location) {
@@ -259,6 +276,11 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
     }
     
     internal func informDelegateOfColorChange(on handle: ChromaColorHandle) { // TEMP:
+        if mode == .Temperature {
+            //Ensure our color is a kelvin temperature color by converting it back and forth
+            handle.color = UIColor(temperature: handle.color.temperature)
+        }
+        
         delegate?.colorPickerHandleDidChange(self, handle: handle, to: handle.color)
     }
     
