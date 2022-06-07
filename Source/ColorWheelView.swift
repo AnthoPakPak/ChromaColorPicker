@@ -12,6 +12,11 @@ import UIKit
 /// such that any displayed image may have perfectly rounded corners.
 private let defaultImageViewCurveInset: CGFloat = 1.0
 
+public enum ColorWheelMode {
+    case RGB
+    case Temperature
+}
+
 public class ColorWheelView: UIView {
     
     public override init(frame: CGRect) {
@@ -30,8 +35,14 @@ public class ColorWheelView: UIView {
         layer.cornerRadius = radius
         
         let screenScale: CGFloat = UIScreen.main.scale
-        if let colorWheelImage: CIImage = makeColorWheelImage(radius: radius * screenScale) {
-            imageView.image = UIImage(ciImage: colorWheelImage, scale: screenScale, orientation: .up)
+        
+        if mode == .RGB {
+            if let colorWheelImage: CIImage = makeColorWheelImage(radius: radius * screenScale) {
+                imageView.image = UIImage(ciImage: colorWheelImage, scale: screenScale, orientation: .up)
+            }
+        } else if mode == .Temperature {
+            //Create a Temperature circle with gradient
+            imageView.layer.addSublayer(makeTemperatureWheelLayer())
         }
         
         // Mask imageview so the generated colorwheel has smooth edges.
@@ -50,6 +61,8 @@ public class ColorWheelView: UIView {
         return CGPoint(x: bounds.midX, y: bounds.midY)
     }
     
+    public var mode: ColorWheelMode = .RGB
+
     /**
      Returns the (x,y) location of the color provided within the ColorWheelView.
      Disregards color's brightness component.
@@ -78,9 +91,11 @@ public class ColorWheelView: UIView {
         // Values on the edge of the circle should be calculated instead of obtained
         // from the rendered view layer. This ensures we obtain correct values where
         // image smoothing may have taken place.
-        guard !pointIsOnColorWheelEdge(point) else {
-            let angleToCenter = atan2(point.x - middlePoint.x, point.y - middlePoint.y)
-            return edgeColor(for: angleToCenter)
+        if mode != .Temperature {
+            guard !pointIsOnColorWheelEdge(point) else {
+                let angleToCenter = atan2(point.x - middlePoint.x, point.y - middlePoint.y)
+                return edgeColor(for: angleToCenter)
+            }
         }
         
         let pixel = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: 4)
@@ -167,6 +182,25 @@ public class ColorWheelView: UIView {
             "inputValue": 1
         ])
         return filter?.outputImage
+    }
+    
+    //inspired by https://stackoverflow.com/a/21121954/4894980
+    internal func makeTemperatureWheelLayer() -> CAGradientLayer {
+        let faucetShape = CAShapeLayer()
+        faucetShape.lineWidth = 50
+        faucetShape.frame = CGRect(x: faucetShape.lineWidth/4, y: faucetShape.lineWidth/4, width: imageView.frame.width - faucetShape.lineWidth, height: imageView.frame.height - faucetShape.lineWidth)
+        faucetShape.strokeColor = UIColor.black.cgColor
+        faucetShape.fillColor = nil
+        let path = CGMutablePath()
+        path.addEllipse(in: faucetShape.frame)
+        faucetShape.path = path
+        
+        let faucet = CAGradientLayer()
+        faucet.frame = imageView.frame
+        faucet.mask = faucetShape
+        faucet.colors = [UIColor.hexStringToUIColor(hex: "FE9C3E").cgColor, UIColor.hexStringToUIColor(hex: "FFFFFF").cgColor, UIColor.hexStringToUIColor(hex: "CADBFE").cgColor].compactMap { $0 }
+        
+        return faucet
     }
     
     /**

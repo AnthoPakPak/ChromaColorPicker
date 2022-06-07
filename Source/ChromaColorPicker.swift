@@ -31,6 +31,15 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
         didSet { layoutNow() }
     }
     
+    public var mode: ColorWheelMode = .RGB {
+        didSet {
+            if mode != colorWheelView.mode {
+                colorWheelView.mode = mode
+                layoutNow()                
+            }
+        }
+    }
+    
     /// A brightness slider attached via the `connect(_:)` method.
     private(set) public weak var brightnessSlider: ChromaBrightnessSlider? {
         didSet {
