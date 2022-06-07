@@ -35,7 +35,6 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
         didSet {
             if mode != colorWheelView.mode {
                 colorWheelView.mode = mode
-                layoutNow()                
             }
         }
     }

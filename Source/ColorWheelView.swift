@@ -61,7 +61,13 @@ public class ColorWheelView: UIView {
         return CGPoint(x: bounds.midX, y: bounds.midY)
     }
     
-    public var mode: ColorWheelMode = .RGB
+    public var mode: ColorWheelMode = .RGB {
+        didSet {
+            imageView.image = nil
+            imageView.layer.sublayers?.removeAll()
+            layoutNow()
+        }
+    }
 
     /**
      Returns the (x,y) location of the color provided within the ColorWheelView.
