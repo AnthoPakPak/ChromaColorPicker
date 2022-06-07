@@ -105,6 +105,18 @@ public class ChromaColorPicker: UIControl, ChromaControlStylable {
         }
     }
     
+    public func removeHandle(_ handle: ChromaColorHandle) {
+        if let index = handles.firstIndex(of: handle) {
+            handles.remove(at: index)
+        }
+        handle.removeFromSuperview()
+        
+        if currentHandle == handle {
+            brightnessSlider?.trackColor = .white
+            currentHandle = nil
+        }
+    }
+    
     public func connect(_ slider: ChromaBrightnessSlider) {
         slider.addTarget(self, action: #selector(brightnessSliderDidValueChange(_:)), for: .valueChanged)
         brightnessSlider = slider
