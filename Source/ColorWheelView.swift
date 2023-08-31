@@ -42,7 +42,7 @@ public class ColorWheelView: UIView {
             }
         } else if mode == .Temperature {
             //Create a Temperature circle with gradient
-            imageView.layer.addSublayer(makeTemperatureWheelLayer())
+            imageView.layer.sublayers = [makeTemperatureWheelLayer()]
         }
         
         // Mask imageview so the generated colorwheel has smooth edges.
