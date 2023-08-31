@@ -164,6 +164,13 @@ public class ColorWheelView: UIView {
     internal func commonInit() {
         backgroundColor = .clear
         setupImageView()
+        
+        //ANTHO: Fix for iOS 17 beta 7 (I think this is when it has been introduced) bug where color wheel is rendered incorrectly on first layout
+        DispatchQueue.main.async {
+            self.imageView.image = nil
+            self.imageView.layer.sublayers?.removeAll()
+            self.layoutNow()
+        }
     }
     
     internal func setupImageView() {
