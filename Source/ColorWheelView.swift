@@ -220,7 +220,7 @@ public class ColorWheelView: UIView {
         faucet.frame = imageView.frame
         faucet.mask = faucetShape
 //        faucet.colors = [UIColor.hexStringToUIColor(hex: "FE9C3E").cgColor, UIColor.hexStringToUIColor(hex: "FFFFFF").cgColor, UIColor.hexStringToUIColor(hex: "CADBFE").cgColor]
-        faucet.colors = [UIColor(temperature: 2001).cgColor, UIColor(temperature: 5500).cgColor, UIColor(temperature: 9000).cgColor]
+        faucet.colors = [UIColor(temperature: 1500).cgColor, UIColor(temperature: 5250).cgColor, UIColor(temperature: 9000).cgColor]
 
         return faucet
     }
