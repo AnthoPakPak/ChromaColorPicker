@@ -74,16 +74,48 @@ public class ColorWheelView: UIView {
      Disregards color's brightness component.
     */
     public func location(of color: UIColor) -> CGPoint {
-        var hue: CGFloat = 0
-        var saturation: CGFloat = 0
-        color.getHue(&hue, saturation: &saturation, brightness: nil, alpha: nil)
+        if mode == .RGB {
+            var hue: CGFloat = 0
+            var saturation: CGFloat = 0
+            color.getHue(&hue, saturation: &saturation, brightness: nil, alpha: nil)
+
+            let radianAngle = hue * (2 * .pi)
+            let distance = saturation * radius
+            let colorTranslation = CGPoint(x: distance * cos(radianAngle), y: -distance * sin(radianAngle))
+            let colorPoint = CGPoint(x: bounds.midX + colorTranslation.x, y: bounds.midY + colorTranslation.y)
+
+            return colorPoint
+        } else if mode == .Temperature { // Temperature support made with the help of ChatGPT: https://chat.openai.com/c/89ba1e79-6b83-4b96-a7d9-7d78cdacb32a This method loops through the wheel (starting from middle top) to find the matching pixel for said color.
+            let inputTemperature = color.temperature
+
+            let step: CGFloat = 1 // Adjust for better performance vs accuracy
+            var closestPoint = CGPoint.zero
+            var minTemperatureDifference: CGFloat = .greatestFiniteMagnitude
+            let edgeBorder: CGFloat = 5.0 // ensure we don't go outside of the wheel
+
+            for angle in stride(from: -(.pi / 2), to: 1.5 * .pi, by: step * (.pi / 180)) {
+                let x = middlePoint.x + (radius - edgeBorder) * cos(angle)
+                let y = middlePoint.y + (radius - edgeBorder) * sin(angle)
+                let point = CGPoint(x: x, y: y)
+
+                if let wheelColor = pixelColor(at: point) {
+                    let wheelTemperature = wheelColor.temperature
+                    let temperatureDifference = abs(wheelTemperature - inputTemperature)
+                    if temperatureDifference < minTemperatureDifference {
+                        minTemperatureDifference = temperatureDifference
+                        closestPoint = point
+                        
+                        if temperatureDifference == 0 { // we have an exact match, return it
+                            return closestPoint
+                        }
+                    }
+                }
+            }
+
+            return closestPoint // when we don't have an exact match, return the closest value
+        }
         
-        let radianAngle = hue * (2 * .pi)
-        let distance = saturation * radius
-        let colorTranslation = CGPoint(x: distance * cos(radianAngle), y: -distance * sin(radianAngle))
-        let colorPoint = CGPoint(x: bounds.midX + colorTranslation.x, y: bounds.midY + colorTranslation.y)
-        
-        return colorPoint
+        return CGPointZero
     }
     
     /**
