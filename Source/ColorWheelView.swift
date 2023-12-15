@@ -88,7 +88,7 @@ public class ColorWheelView: UIView {
         } else if mode == .Temperature { // Temperature support made with the help of ChatGPT: https://chat.openai.com/c/89ba1e79-6b83-4b96-a7d9-7d78cdacb32a This method loops through the wheel (starting from middle top) to find the matching pixel for said color.
             let inputTemperature = color.temperature
 
-            let step: CGFloat = 1 // Adjust for better performance vs accuracy
+            let step: CGFloat = 5 // Adjust for better performance vs accuracy. If I set it to 1, the for-loop could make 360 tours. With 5, it is 72 max, so the performances are better.
             var closestPoint = CGPoint.zero
             var minTemperatureDifference: CGFloat = .greatestFiniteMagnitude
             let edgeBorder: CGFloat = 5.0 // ensure we don't go outside of the wheel
